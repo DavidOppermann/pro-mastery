@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Pro Mastery (2026) — Premium Edition</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  :root {
+    --orange: #D4622A;
+    --orange-light: #F4845F;
+    --orange-dark: #A8430F;
+    --dark: #1a1a2e;
+    --darker: #0f0f1a;
+    --card: #22223a;
+    --card-light: #2a2a44;
+    --text: #e8e8f0;
+    --text-light: #b0b0c8;
+    --muted: #9090aa;
+    --green: #4ade80;
+    --green-dark: #22c55e;
+    --blue: #60a5fa;
+    --purple: #a78bfa;
+    --border: rgba(255,255,255,0.08);
+    --border-light: rgba(255,255,255,0.12);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--darker) 0%, #1a1a2e 100%);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* ANIMATIONS */
+  @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
+  @keyframes shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }
+  @keyframes glow { 0%, 100% { box-shadow: 0 0 10px rgba(212,98,42,0.3); } 50% { box-shadow: 0 0 20px rgba(212,98,42,0.6); } }
+
+  .app { display: flex; width: 100%; height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 300px; flex-shrink: 0; background: rgba(26, 26, 46, 0.8);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid var(--border-light);
+    display: flex; flex-direction: column;
+    overflow-y: auto; height: 100vh;
+    box-shadow: inset -1px 0 0 var(--border);
+  }
+
+  .sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(212,98,42,0.1) 0%, transparent 100%);
+  }
+
+  .logo {
+    display: flex; align-items: center; gap: 0.75rem;
+    font-weight: 900; font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--orange) 0%, var(--orange-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: slideIn 0.6s ease;
+  }
+
+  .progress-bar-wrap { margin-top: 1.25rem; }
+  .progress-label { font-size: 0.7rem; color: var(--muted); margin-bottom: 0.6rem; display: flex; justify-content: space-between; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .progress-track { background: rgba(255,255,255,0.05); border-radius: 99px; height: 8px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.3); }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--orange), var(--orange-light)); border-radius: 99px; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); box-shadow: 0 0 15px rgba(212,98,42,0.5); }
+
+  .nav-section { padding: 1.25rem 1rem 0.75rem; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+  .nav-item {
+    display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem;
+    cursor: pointer; border-left: 3px solid transparent; font-size: 0.875rem;
+    color: var(--muted); transition: all 0.3s ease;
+    margin: 0.25rem 0.5rem;
+    border-radius: 8px;
+  }
+
+  .nav-item:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.04);
+    transform: translateX(4px);
+  }
+
+  .nav-item.active {
+    color: white;
+    border-left-color: var(--orange);
+    background: linear-gradient(90deg, rgba(212,98,42,0.2) 0%, transparent 100%);
+    font-weight: 600;
+  }
+
+  .nav-item.done { color: var(--green); }
+  .nav-badge {
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+    background: rgba(255,255,255,0.08);
+    color: var(--muted);
+    transition: all 0.3s ease;
+    border: 1px solid var(--border);
+  }
+
+  .nav-item:hover .nav-badge { background: rgba(255,255,255,0.12); transform: scale(1.1); }
+  .nav-item.active .nav-badge { background: linear-gradient(135deg, var(--orange), var(--orange-light)); color: white; border-color: var(--orange-light); }
+  .nav-item.done .nav-badge { background: var(--green); color: white; border-color: var(--green-dark); }
+
+  .xp-display {
+    margin: auto 0 0; padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(212,98,42,0.1) 0%, transparent 100%);
+  }
+
+  .xp-chip {
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    border-radius: 12px; padding: 0.9rem 1rem;
+    font-size: 0.85rem; font-weight: 700;
+    text-align: center; color: white;
+    box-shadow: 0 8px 24px rgba(212,98,42,0.3);
+    animation: glow 3s ease-in-out infinite;
+  }
+
+  /* MAIN CONTENT */
+  .main {
+    flex: 1; overflow-y: auto; padding: 2.5rem;
+    background: linear-gradient(135deg, var(--darker) 0%, #1a1a2e 50%, rgba(212,98,42,0.05) 100%);
+    display: flex; flex-direction: column;
+  }
+
+  .main::-webkit-scrollbar { width: 8px; }
+  .main::-webkit-scrollbar-track { background: transparent; }
+  .main::-webkit-scrollbar-thumb { background: rgba(212,98,42,0.3); border-radius: 99px; }
+  .main::-webkit-scrollbar-thumb:hover { background: rgba(212,98,42,0.5); }
+
+  .screen { display: none; animation: fadeIn 0.5s ease; }
+  .screen.active { display: block !important; }
+
+  /* HERO SECTION */
+  .hero { text-align: center; padding: 2rem 1rem 2.5rem; animation: slideIn 0.6s ease; }
+  .hero h1 {
+    font-size: 2.8rem; font-weight: 900; line-height: 1.1;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p { color: var(--text-light); font-size: 1.1rem; max-width: 600px; margin: 0 auto; font-weight: 500; }
+
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem; margin: 2rem 0;
+  }
+
+  .module-card {
+    background: rgba(34, 34, 58, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px; padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: slideIn 0.6s ease;
+  }
+
+  .module-card:hover {
+    border-color: var(--orange-light);
+    background: rgba(34, 34, 58, 0.8);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 36px rgba(212,98,42,0.2);
+  }
+
+  .module-card .mc-icon { font-size: 2.2rem; margin-bottom: 0.75rem; display: inline-block; transition: transform 0.3s ease; }
+  .module-card:hover .mc-icon { transform: scale(1.2) rotate(5deg); }
+  .module-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .module-card p { font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.75rem; }
+  .module-card .mc-lessons { font-size: 0.75rem; color: var(--orange-light); font-weight: 600; }
+
+  .start-btn {
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    color: white; padding: 1rem 2.75rem;
+    border-radius: 99px; font-weight: 700; font-size: 1rem;
+    border: none; cursor: pointer; margin-top: 1.5rem;
+    box-shadow: 0 8px 24px rgba(212,98,42,0.3);
+    transition: all 0.3s ease;
+  }
+
+  .start-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(212,98,42,0.4);
+  }
+
+  .start-btn:active { transform: translateY(0); }
+
+  /* LESSON CONTENT */
+  .lesson-header { margin-bottom: 2rem; animation: slideIn 0.6s ease; }
+  .breadcrumb { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; font-weight: 600; }
+  .breadcrumb span { color: var(--orange-light); font-weight: 700; }
+  .lesson-title { font-size: 2rem; font-weight: 900; margin-bottom: 0.5rem; }
+  .lesson-subtitle { font-size: 1.05rem; color: var(--text-light); }
+
+  .concept-card {
+    background: rgba(34, 34, 58, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px; padding: 2rem;
+    margin-bottom: 1.5rem;
+    animation: slideIn 0.6s ease;
+    transition: all 0.3s ease;
+  }
+
+  .concept-card:hover {
+    border-color: rgba(212,98,42,0.3);
+    background: rgba(34, 34, 58, 0.8);
+  }
+
+  .concept-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 1rem; color: var(--orange-light); }
+  .concept-card p { color: var(--text-light); line-height: 1.7; font-size: 0.95rem; margin-bottom: 0.75rem; }
+  .concept-card ul { color: var(--text-light); line-height: 1.8; font-size: 0.95rem; padding-left: 1.5rem; }
+  .concept-card li { margin-bottom: 0.5rem; }
+
+  .tip-box {
+    background: linear-gradient(135deg, rgba(212,98,42,0.15) 0%, transparent 100%);
+    border-left: 4px solid var(--orange);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: var(--orange-light);
+    font-weight: 500;
+  }
+
+  .tip-box strong { display: block; margin-bottom: 0.4rem; font-weight: 700; color: var(--orange); }
+
+  .nav-buttons { display: flex; gap: 1rem; margin-top: 2.5rem; animation: slideIn 0.6s ease 0.2s both; }
+  .btn-prev, .btn-next {
+    padding: 0.85rem 2rem;
+    border-radius: 99px;
+    font-weight: 700; font-size: 0.9rem;
+    border: none; cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .btn-next {
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    color: white;
+    box-shadow: 0 8px 20px rgba(212,98,42,0.3);
+  }
+
+  .btn-next:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(212,98,42,0.4);
+  }
+
+  .btn-prev {
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    border: 1px solid var(--border-light);
+  }
+
+  .btn-prev:hover {
+    background: rgba(255,255,255,0.12);
+    transform: translateX(-2px);
+    border-color: var(--orange-light);
+    color: var(--orange-light);
+  }
+
+  /* FINAL SCREEN */
+  .final-screen { text-align: center; padding: 3rem 1rem; animation: slideIn 0.6s ease; }
+  .trophy {
+    font-size: 6rem; margin-bottom: 1.5rem;
+    display: inline-block;
+    animation: slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .final-screen h1 {
+    font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem;
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .final-screen h1 span {
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .final-screen p { color: var(--text-light); max-width: 520px; margin: 1rem auto; font-size: 1rem; }
+
+  .badge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.25rem; margin: 2.5rem 0;
+  }
+
+  .badge {
+    background: rgba(34, 34, 58, 0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-light);
+    border-radius: 16px; padding: 1.5rem;
+    transition: all 0.3s ease;
+    animation: slideIn 0.6s ease;
+  }
+
+  .badge:hover {
+    border-color: var(--orange-light);
+    background: rgba(34, 34, 58, 0.8);
+    transform: translateY(-4px);
+  }
+
+  .badge .b-icon { font-size: 2.5rem; margin-bottom: 0.6rem; }
+  .badge h4 { font-size: 0.9rem; font-weight: 800; }
+  .badge p { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(212,98,42,0.3); border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(212,98,42,0.5); }
+
+  @media(max-width: 900px) {
+    .sidebar { width: 260px; }
+    .hero h1 { font-size: 2rem; }
+    .module-grid { grid-template-columns: 1fr; }
+  }
+
+  @media(max-width: 640px) {
+    .app { flex-direction: column; }
+    .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    .main { padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">⚡ Claude Pro Mastery</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-label"><span>Progress</span><span id="pct">0%</span></div>
+        <div class="progress-track"><div class="progress-fill" id="pbar" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="nav-section">Start Here</div>
+    <div class="nav-item active" onclick="goTo('welcome')" id="nav-welcome"><div class="nav-badge">★</div> Welcome</div>
+
+    <div class="nav-section">Foundations</div>
+    <div class="nav-item" onclick="goTo('l1')" id="nav-l1"><div class="nav-badge">1</div> 5 Habits</div>
+    <div class="nav-item" onclick="goTo('l2')" id="nav-l2"><div class="nav-badge">2</div> Models</div>
+    <div class="nav-item" onclick="goTo('l3')" id="nav-l3"><div class="nav-badge">3</div> Config</div>
+
+    <div class="nav-section">2026 Features</div>
+    <div class="nav-item" onclick="goTo('l4')" id="nav-l4"><div class="nav-badge">4</div> Effort & Workflows</div>
+    <div class="nav-item" onclick="goTo('l5')" id="nav-l5"><div class="nav-badge">✨</div> Claude Design</div>
+
+    <div class="nav-section">Skills & Integrations</div>
+    <div class="nav-item" onclick="goTo('l6')" id="nav-l6"><div class="nav-badge">5</div> Skills</div>
+    <div class="nav-item" onclick="goTo('l7')" id="nav-l7"><div class="nav-badge">5</div> Plugins</div>
+    <div class="nav-item" onclick="goTo('l8')" id="nav-l8"><div class="nav-badge">5</div> Connections</div>
+
+    <div class="nav-section">Labs Ecosystem</div>
+    <div class="nav-item" onclick="goTo('l9')" id="nav-l9"><div class="nav-badge">6</div> Chrome Agent</div>
+    <div class="nav-item" onclick="goTo('l10')" id="nav-l10"><div class="nav-badge">6</div> Cowork</div>
+    <div class="nav-item" onclick="goTo('l11')" id="nav-l11"><div class="nav-badge">6</div> MCP</div>
+
+    <div class="nav-section">Complete</div>
+    <div class="nav-item" onclick="goTo('final')" id="nav-final"><div class="nav-badge">🏆</div> Certificate</div>
+
+    <div class="xp-display">
+      <div class="xp-chip">⚡ <span id="xp-count">0</span> XP Earned</div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- WELCOME -->
+    <div class="screen active" id="screen-welcome">
+      <div class="hero">
+        <h1>Master <span>Claude Pro</span></h1>
+        <p>Complete 2026 Edition — Master every feature, skill, integration, and Anthropic Labs product</p>
+      </div>
+      <div class="module-grid">
+        <div class="module-card" onclick="goTo('l1')"><div class="mc-icon">⚡</div><h3>Foundations</h3><p>Habits, models, configuration</p></div>
+        <div class="module-card" onclick="goTo('l4')"><div class="mc-icon">✨</div><h3>2026 Features</h3><p>Effort control, workflows, design</p></div>
+        <div class="module-card" onclick="goTo('l6')"><div class="mc-icon">🔌</div><h3>Skills & Integrations</h3><p>Skills, plugins, connections</p></div>
+        <div class="module-card" onclick="goTo('l9')"><div class="mc-icon">🚀</div><h3>Labs Ecosystem</h3><p>Chrome, Cowork, MCP</p></div>
+      </div>
+      <div style="text-align:center"><button class="start-btn" onclick="goTo('l1')">Start Learning →</button></div>
+    </div>
+
+    <!-- LESSON 1 -->
+    <div class="screen" id="screen-l1">
+      <div class="lesson-header">
+        <div class="breadcrumb">Module 1 › <span>5 Key Habits</span></div>
+        <div class="lesson-title">⚡ Maximize Token Efficiency</div>
+      </div>
+      <div class="concept-card">
+        <h3>The Five Habits That Save the Most</h3>
+        <p><strong>1. Edit, Don't Stack:</strong> Edit messages instead of sending follow-ups. Saves 70–80% of wasted tokens.</p>
+        <p><strong>2. New Chat ~15 Msgs:</strong> Context compounds. Start fresh after ~15 messages.</p>
+        <p><strong>3. Batch Into One:</strong> Combine all requirements into a single, clear message.</p>
+        <p><strong>4. Turn Off Burners:</strong> Disable Web Search and Artifacts by default.</p>
+        <p><strong>5. Pace Your Day:</strong> Use 3× 90-min sessions instead of one 4-hour marathon.</p>
+        <div class="tip-box"><strong>Result:</strong> Together these cut token consumption by 60-70% while improving quality.</div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('welcome')">← Back</button>
+        <button class="btn-next" onclick="goTo('l2')">Next Lesson →</button>
+      </div>
+    </div>
+
+    <!-- LESSONS 2-11 (Abbreviated for space) -->
+    <div class="screen" id="screen-l2">
+      <div class="lesson-header">
+        <div class="breadcrumb">Module 2 › <span>Model Selection</span></div>
+        <div class="lesson-title">🧠 Pick the Right Model</div>
+      </div>
+      <div class="concept-card">
+        <h3>Three-Tier Model System</h3>
+        <p><strong>Haiku (~500 tok):</strong> Quick answers, grammar, brainstorming. Use for 80% of work.</p>
+        <p><strong>Sonnet (~2,000 tok):</strong> Writing, coding, analysis. Use for 15% of work.</p>
+        <p><strong>Opus 4.8 (~8,000 tok):</strong> Deep research, hard logic. Use for 5% only.</p>
+        <div class="tip-box"><strong>Golden Rule:</strong> Haiku for drafts. Sonnet for real work. Opus for hard stuff.</div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('l1')">← Back</button>
+        <button class="btn-next" onclick="goTo('l3')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-l3">
+      <div class="lesson-header"><div class="breadcrumb">Module 3 › <span>Configuration</span></div><div class="lesson-title">🔧 Memory, Projects & CLAUDE.md</div></div>
+      <div class="concept-card">
+        <h3>Three Configuration Layers</h3>
+        <p><strong>Memory:</strong> Your role, tone, rules. Loads automatically in every chat.</p>
+        <p><strong>Projects:</strong> Upload files once. Claude caches them. Reference for free.</p>
+        <p><strong>CLAUDE.md:</strong> Project file with stack/tone/rules. Reads automatically.</p>
+        <div class="tip-box"><strong>Benefit:</strong> Never repeat context again. Saves hours weekly.</div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('l2')">← Back</button>
+        <button class="btn-next" onclick="goTo('l4')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-l4">
+      <div class="lesson-header"><div class="breadcrumb">Module 4 › <span>2026 Features</span></div><div class="lesson-title">✨ Effort Control & Dynamic Workflows</div></div>
+      <div class="concept-card">
+        <h3>Effort Control (Opus 4.8)</h3>
+        <p>Slider alongside model selector. Standard/Extra/Max effort. Higher = deeper thinking, more tokens.</p>
+        <h3 style="margin-top:1rem">Dynamic Workflows</h3>
+        <p>Spawn 100s of parallel subagents for massive projects. Perfect for code migrations, bulk processing.</p>
+        <div class="tip-box"><strong>Example:</strong> Migrate 500k-line codebase from Vue 2 → 3 in hours (not weeks).</div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('l3')">← Back</button>
+        <button class="btn-next" onclick="goTo('l5')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-l5">
+      <div class="lesson-header"><div class="breadcrumb">Module 4 › <span>Claude Design</span></div><div class="lesson-title">🎨 Co-Create Designs with Claude</div></div>
+      <div class="concept-card">
+        <h3>Claude Design (Anthropic Labs)</h3>
+        <p>Collaborate with Claude to create polished designs, prototypes, slides. Start from text, images, docs, or web elements.</p>
+        <p><strong>Key Features:</strong> Inline commenting, live editing, design system integration, export to Canva/PDF/PPTX/HTML.</p>
+        <div class="tip-box"><strong>Pro Tip:</strong> Upload your design system once. Claude applies it automatically to every project.</div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('l4')">← Back</button>
+        <button class="btn-next" onclick="goTo('l6')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-l6">
+      <div class="lesson-header"><div class="breadcrumb">Module 5 › <span>Skills Mastery</span></div><div class="lesson-title">🎯 Skills Trigger Automatically</div></div>
+      <div class="concept-card">
+        <h3>What Are Skills?</h3>
+        <p>Specialized instruction bundles for specific tasks. When you mention a task, Claude automatically consults the relevant skill.</p>
+        <p><strong>High-Priority:</strong> pptx, docx, xlsx, pdf, doc-coauthoring, theme-factory</p>
+        <p><strong>By Domain:</strong> Finance (financial-statements, reconciliation), Marketing (campaign-plan, seo-audit), Sales (pipeline-review, forecast), Legal (contract-review, nda-triage)</p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('l5')">← Back</button>
+        <button class="btn-next" onclick="goTo('l7')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-l7">
+      <div class="lesson-header"><div class="breadcrumb">Module 5 › <span>Plugins</span></div><div class="lesson-title">🔌 Bundles for Your Role</div></div>
+      <div class="concept-card">
+        <h3>What Are Plugins?</h3>
+        <p>Bundles of skills + MCP servers for specific roles. Install once, access all tools automatically.</p>
+        <ul><li><strong>Small Business:</strong> QuickBooks, PayPal, HubSpot for cash flow, invoicing, payroll</li><li><strong>Finance:</strong> DCF modeling, comps analysis, earnings reports</li><li><strong>Marketing:</strong> Campaign planning, email sequences, SEO audits</li></ul>
+        <div class="tip-box"><strong>Setup:</strong> Go to Settings → Plugins. Search your role. Install once.</div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('l6')">← Back</button>
+        <button class="btn-next" onclick="goTo('l8')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-l8">
+      <div class="lesson-header"><div class="breadcrumb">Module 5 › <span>Connections</span></div><div class="lesson-title">🔗 Connect to Your Tools</div></div>
+      <div class="concept-card">
+        <h3>Data Integrations via MCP</h3>
+        <p>Link Claude to email, CRM, accounting, cloud storage, databases. Claude reads and analyzes real-time data.</p>
+        <p><strong>Common:</strong> Gmail, Google Cal, HubSpot, Slack, QuickBooks, Google Drive, Asana, Figma, Snowflake</p>
+        <div class="tip-box"><strong>Example:</strong> "Prep me for call with Acme" → Claude pulls deal, emails, LinkedIn research, meeting time → full prep doc.</div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('l7')">← Back</button>
+        <button class="btn-next" onclick="goTo('l9')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-l9">
+      <div class="lesson-header"><div class="breadcrumb">Module 6 › <span>Chrome Agent</span></div><div class="lesson-title">🌐 Browser Automation</div></div>
+      <div class="concept-card">
+        <h3>Claude in Chrome</h3>
+        <p>Browser extension that lets Claude read, click, navigate websites. Works in Chrome side panel while you browse.</p>
+        <p><strong>Features:</strong> Multi-tab management, workflow recording, scheduled tasks, developer tools access.</p>
+        <p><strong>Use Cases:</strong> Automate expense reports, monitor website changes, schedule meetings, research prices, test features.</p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('l8')">← Back</button>
+        <button class="btn-next" onclick="goTo('l10')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-l10">
+      <div class="lesson-header"><div class="breadcrumb">Module 6 › <span>Cowork</span></div><div class="lesson-title">🖥️ Desktop Automation</div></div>
+      <div class="concept-card">
+        <h3>Cowork Desktop App</h3>
+        <p>Brings Claude's agentic capabilities to your computer. Claude moves between files, folders, apps — synthesizing info autonomously.</p>
+        <p><strong>Capabilities:</strong> File access, app automation (Word, Excel, Finder), info synthesis, Skills integration.</p>
+        <p><strong>Use Cases:</strong> Month-end close (receipts → report → email), research (PDFs → memo), presentations (data → deck), file organization, onboarding.</p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('l9')">← Back</button>
+        <button class="btn-next" onclick="goTo('l11')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen" id="screen-l11">
+      <div class="lesson-header"><div class="breadcrumb">Module 6 › <span>MCP</span></div><div class="lesson-title">🔌 Industry Standard Protocol</div></div>
+      <div class="concept-card">
+        <h3>Model Context Protocol</h3>
+        <p>Open-source standard connecting Claude to tools and services. Universal adapter. 100M+ downloads. 100B+ dollars of tools support it.</p>
+        <p><strong>How:</strong> MCP Server bridges Claude + tool. Desktop Extensions (.mcpb) = one-click install.</p>
+        <p><strong>Supported:</strong> Gmail, Asana, HubSpot, Salesforce, Snowflake, BigQuery, Slack, Zapier, Figma, Canva, Adobe</p>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-prev" onclick="goTo('l10')">← Back</button>
+        <button class="btn-next" onclick="goTo('final')">Certificate →</button>
+      </div>
+    </div>
+
+    <!-- CERTIFICATE -->
+    <div class="screen" id="screen-final">
+      <div class="final-screen">
+        <div class="trophy">🏆🚀✨</div>
+        <h1>You're a <span>Claude Pro</span> Master (2026)!</h1>
+        <p>You've mastered every Claude feature, skill, integration, and Anthropic Labs product. Ready for maximum productivity!</p>
+        <div class="badge-grid">
+          <div class="badge"><div class="b-icon">⚡</div><h4>Efficiency</h4><p>Habits & models</p></div>
+          <div class="badge"><div class="b-icon">✨</div><h4>2026 Ready</h4><p>Effort & workflows</p></div>
+          <div class="badge"><div class="b-icon">🔌</div><h4>Integrated</h4><p>Skills & connections</p></div>
+          <div class="badge"><div class="b-icon">🚀</div><h4>Automated</h4><p>Chrome & Cowork</p></div>
+        </div>
+        <p style="margin-top:2rem; font-size:0.95rem; color:var(--text-light);">You now have complete knowledge of Claude Pro 2026. Go build amazing things! 🎉</p>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+  const screens = ['welcome','l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11','final'];
+  const completed = new Set(['welcome']);
+  let xp = 0;
+
+  function goTo(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const screen = document.getElementById('screen-' + id);
+    if (screen) screen.classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const navEl = document.getElementById('nav-' + id);
+    if (navEl) navEl.classList.add('active');
+    completed.add(id);
+    updateProgress();
+  }
+
+  function updateProgress() {
+    const done = screens.filter(l => completed.has(l)).length;
+    const pct = Math.round((done / screens.length) * 100);
+    const pbar = document.getElementById('pbar');
+    const pctEl = document.getElementById('pct');
+    if (pbar) pbar.style.width = pct + '%';
+    if (pctEl) pctEl.textContent = pct + '%';
+  }
+
+  goTo('welcome');
+</script>
+</body>
+</html>
