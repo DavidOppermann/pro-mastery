@@ -36,6 +36,7 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
 
+  /* ANIMATIONS */
   @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
   @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.8; } }
@@ -44,6 +45,7 @@
 
   .app { display: flex; width: 100%; height: 100vh; }
 
+  /* SIDEBAR */
   .sidebar {
     width: 300px; flex-shrink: 0; background: rgba(26, 26, 46, 0.8);
     backdrop-filter: blur(10px);
@@ -126,6 +128,7 @@
     animation: glow 3s ease-in-out infinite;
   }
 
+  /* MAIN CONTENT */
   .main {
     flex: 1; overflow-y: auto; padding: 2.5rem;
     background: linear-gradient(135deg, var(--darker) 0%, #1a1a2e 50%, rgba(212,98,42,0.05) 100%);
@@ -140,6 +143,7 @@
   .screen { display: none; animation: fadeIn 0.5s ease; }
   .screen.active { display: block !important; }
 
+  /* HERO SECTION */
   .hero { text-align: center; padding: 2rem 1rem 2.5rem; animation: slideIn 0.6s ease; }
   .hero h1 {
     font-size: 2.8rem; font-weight: 900; line-height: 1.1;
@@ -202,6 +206,7 @@
 
   .start-btn:active { transform: translateY(0); }
 
+  /* LESSON CONTENT */
   .lesson-header { margin-bottom: 2rem; animation: slideIn 0.6s ease; }
   .breadcrumb { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; font-weight: 600; }
   .breadcrumb span { color: var(--orange-light); font-weight: 700; }
@@ -285,6 +290,7 @@
     color: var(--orange-light);
   }
 
+  /* FINAL SCREEN */
   .final-screen { text-align: center; padding: 3rem 1rem; animation: slideIn 0.6s ease; }
   .trophy {
     font-size: 6rem; margin-bottom: 1.5rem;
@@ -331,11 +337,13 @@
   .badge h4 { font-size: 0.9rem; font-weight: 800; }
   .badge p { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
 
+  /* SCROLLBAR */
   ::-webkit-scrollbar { width: 10px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(212,98,42,0.3); border-radius: 99px; }
   ::-webkit-scrollbar-thumb:hover { background: rgba(212,98,42,0.5); }
 
+  /* MOBILE MENU TOGGLE */
   .mobile-menu-btn {
     display: none;
     background: none;
@@ -476,6 +484,7 @@
     .progress-label { font-size: 0.6rem; margin-bottom: 0.5rem; }
   }
 
+  /* QUIZ MODAL */
   .quiz-modal {
     display: none;
     position: fixed;
@@ -598,6 +607,7 @@
 <body>
 <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileMenu()">☰</button>
 <div class="app">
+
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="logo">⚡ Claude Pro Mastery</div>
@@ -638,6 +648,8 @@
   </aside>
 
   <main class="main">
+
+    <!-- WELCOME -->
     <div class="screen active" id="screen-welcome">
       <div class="hero">
         <h1>Master <span>Claude Pro</span></h1>
@@ -652,6 +664,7 @@
       <div style="text-align:center"><button class="start-btn" onclick="goTo('l1')">Start Learning →</button></div>
     </div>
 
+    <!-- LESSON 1 -->
     <div class="screen" id="screen-l1">
       <div class="lesson-header">
         <div class="breadcrumb">Module 1 › <span>5 Key Habits</span></div>
@@ -673,6 +686,7 @@
       </div>
     </div>
 
+    <!-- LESSONS 2-11 (Abbreviated for space) -->
     <div class="screen" id="screen-l2">
       <div class="lesson-header">
         <div class="breadcrumb">Module 2 › <span>Model Selection</span></div>
@@ -829,6 +843,7 @@
       </div>
     </div>
 
+    <!-- CERTIFICATE -->
     <div class="screen" id="screen-final">
       <div class="final-screen">
         <div class="trophy">🏆🚀✨</div>
@@ -848,6 +863,7 @@
 
 </div>
 
+<!-- QUIZ MODAL -->
 <div class="quiz-modal" id="quizModal">
   <div class="quiz-container">
     <div id="quizContent"></div>
@@ -1088,6 +1104,7 @@
     }
   }
 
+  // Close menu when clicking outside
   document.addEventListener('click', function(event) {
     const sidebar = document.getElementById('sidebar');
     const menuBtn = document.getElementById('mobileMenuBtn');
@@ -1096,6 +1113,7 @@
     }
   });
 
+  // Close quiz when clicking outside
   document.addEventListener('click', function(event) {
     const modal = document.getElementById('quizModal');
     const container = document.querySelector('.quiz-container');
@@ -1104,7 +1122,48 @@
     }
   });
 
+  // Add event listeners to all quiz buttons
+  document.addEventListener('DOMContentLoaded', function() {
+    const quizButtons = document.querySelectorAll('.btn-quiz');
+    quizButtons.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        // Extract lesson ID from the onclick attribute if present
+        const onclickAttr = btn.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes('openQuiz')) {
+          const match = onclickAttr.match(/openQuiz\('([^']+)'\)/);
+          if (match) {
+            openQuiz(match[1]);
+          }
+        }
+      });
+    });
+  });
+
+  // Also add direct event listeners for quiz buttons if DOM is already loaded
+  const addQuizListeners = () => {
+    const quizButtons = document.querySelectorAll('.btn-quiz');
+    quizButtons.forEach(btn => {
+      if (!btn.hasListener) {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          const onclickAttr = btn.getAttribute('onclick');
+          if (onclickAttr && onclickAttr.includes('openQuiz')) {
+            const match = onclickAttr.match(/openQuiz\('([^']+)'\)/);
+            if (match) {
+              openQuiz(match[1]);
+            }
+          }
+        });
+        btn.hasListener = true;
+      }
+    });
+  };
+
   goTo('welcome');
+  addQuizListeners();
 </script>
 </body>
 </html>
