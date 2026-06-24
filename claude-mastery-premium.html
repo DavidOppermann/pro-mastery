@@ -1122,31 +1122,13 @@
     }
   });
 
-  // Add event listeners to all quiz buttons
-  document.addEventListener('DOMContentLoaded', function() {
-    const quizButtons = document.querySelectorAll('.btn-quiz');
-    quizButtons.forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        // Extract lesson ID from the onclick attribute if present
-        const onclickAttr = btn.getAttribute('onclick');
-        if (onclickAttr && onclickAttr.includes('openQuiz')) {
-          const match = onclickAttr.match(/openQuiz\('([^']+)'\)/);
-          if (match) {
-            openQuiz(match[1]);
-          }
-        }
-      });
-    });
-  });
-
-  // Also add direct event listeners for quiz buttons if DOM is already loaded
-  const addQuizListeners = () => {
+  // Add event listeners to all quiz buttons - works on both click and touch
+  const attachQuizListeners = () => {
     const quizButtons = document.querySelectorAll('.btn-quiz');
     quizButtons.forEach(btn => {
       if (!btn.hasListener) {
-        btn.addEventListener('click', function(e) {
+        // Handle both click and touch events
+        const handleQuizClick = (e) => {
           e.preventDefault();
           e.stopPropagation();
           const onclickAttr = btn.getAttribute('onclick');
@@ -1156,14 +1138,17 @@
               openQuiz(match[1]);
             }
           }
-        });
+        };
+        
+        btn.addEventListener('click', handleQuizClick);
+        btn.addEventListener('touchend', handleQuizClick);
         btn.hasListener = true;
       }
     });
   };
 
-  goTo('welcome');
-  addQuizListeners();
+  document.addEventListener('DOMContentLoaded', attachQuizListeners);
+  attachQuizListeners();
 </script>
 </body>
 </html>
