@@ -1050,36 +1050,10 @@
     options.forEach((o, i) => o.classList.toggle('selected', i === a));
   }
 
-  function submitQuiz() {
-    const quiz = quizzes[currentQuiz];
-    let correct = 0;
-
-    quiz.questions.forEach((q, i) => {
-      if (quizAnswers[i] === q.a) correct++;
-    });
-
-    xp += correct * quiz.bonus;
-    updateXPDisplay();
-
-    const content = document.getElementById('quizContent');
-    const pct = Math.round((correct / quiz.questions.length) * 100);
-
-    let message = pct >= 70 ? '🎉 Great job!' : '📚 Keep learning!';
-
-    content.innerHTML = `
-      <div class="quiz-results">
-        <h2>Quiz Complete!</h2>
-        <div class="score">${pct}%</div>
-        <p>${correct} out of ${quiz.questions.length} correct</p>
-        <p>+${correct * quiz.bonus} XP</p>
-        <p>${message}</p>
-        <div class="quiz-buttons">
-          <button class="btn-close-quiz" onclick="closeQuiz()">Close</button>
-          <button class="btn-retake-quiz" onclick="openQuiz('${currentQuiz}')">Retake Quiz</button>
-        </div>
-      </div>
-    `;
-  }
+  // Scroll to top so results are visible on mobile
+    content.scrollTop = 0;
+    const container = document.querySelector('.quiz-container');
+    if (container) container.scrollTop = 0;
 
   function closeQuiz() {
     document.getElementById('quizModal').classList.remove('active');
