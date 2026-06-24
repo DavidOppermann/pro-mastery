@@ -246,13 +246,24 @@
 
   .tip-box strong { display: block; margin-bottom: 0.4rem; font-weight: 700; color: var(--orange); }
 
-  .nav-buttons { display: flex; gap: 1rem; margin-top: 2.5rem; animation: slideIn 0.6s ease 0.2s both; }
-  .btn-prev, .btn-next {
+  .nav-buttons { display: flex; gap: 1rem; margin-top: 2.5rem; animation: slideIn 0.6s ease 0.2s both; flex-wrap: wrap; }
+  .btn-prev, .btn-next, .btn-quiz {
     padding: 0.85rem 2rem;
     border-radius: 99px;
     font-weight: 700; font-size: 0.9rem;
     border: none; cursor: pointer;
     transition: all 0.3s ease;
+  }
+
+  .btn-quiz {
+    background: linear-gradient(135deg, var(--purple), #c084fc);
+    color: white;
+    box-shadow: 0 8px 20px rgba(167, 139, 250, 0.3);
+  }
+
+  .btn-quiz:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(167, 139, 250, 0.4);
   }
 
   .btn-next {
@@ -472,6 +483,125 @@
     .logo { font-size: 0.95rem; }
     .progress-label { font-size: 0.6rem; margin-bottom: 0.5rem; }
   }
+
+  /* QUIZ MODAL */
+  .quiz-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .quiz-modal.active { display: flex; }
+
+  .quiz-container {
+    background: rgba(34, 34, 58, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    padding: 2.5rem;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .quiz-header { margin-bottom: 2rem; text-align: center; }
+  .quiz-header h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 0.5rem; }
+  .quiz-header p { color: var(--text-light); font-size: 0.95rem; }
+
+  .quiz-question { margin-bottom: 2rem; }
+  .quiz-question h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; color: var(--orange-light); }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 0.75rem; }
+  .quiz-option {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid var(--border-light);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    color: var(--text-light);
+  }
+
+  .quiz-option:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: var(--orange-light);
+  }
+
+  .quiz-option.selected {
+    background: rgba(212, 98, 42, 0.2);
+    border-color: var(--orange-light);
+    color: var(--orange-light);
+  }
+
+  .quiz-option.correct {
+    background: rgba(74, 222, 128, 0.2);
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .quiz-option.incorrect {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    color: #fca5a5;
+  }
+
+  .quiz-results { text-align: center; padding: 2rem; }
+  .quiz-results .score { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--orange), var(--orange-light)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 1rem 0; }
+  .quiz-results p { color: var(--text-light); margin-bottom: 1rem; font-size: 0.95rem; }
+
+  .quiz-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: center; flex-wrap: wrap; }
+  .btn-close-quiz, .btn-retake-quiz {
+    padding: 0.8rem 1.5rem;
+    border-radius: 99px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+  }
+
+  .btn-close-quiz {
+    background: rgba(255,255,255,0.08);
+    color: var(--text);
+    border: 1px solid var(--border-light);
+  }
+
+  .btn-close-quiz:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: var(--orange-light);
+  }
+
+  .btn-retake-quiz {
+    background: linear-gradient(135deg, var(--purple), #c084fc);
+    color: white;
+    box-shadow: 0 8px 20px rgba(167, 139, 250, 0.3);
+  }
+
+  .btn-retake-quiz:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(167, 139, 250, 0.4);
+  }
+
+  @media(max-width: 480px) {
+    .quiz-container { padding: 1.5rem; width: 95%; }
+    .quiz-header h2 { font-size: 1.4rem; }
+    .quiz-question h3 { font-size: 1rem; }
+    .quiz-option { padding: 0.8rem 1rem; font-size: 0.9rem; }
+    .quiz-results .score { font-size: 2.5rem; }
+    .quiz-buttons { flex-direction: column; }
+    .btn-close-quiz, .btn-retake-quiz { width: 100%; }
+  }
 </style>
 </head>
 <body>
@@ -551,6 +681,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('welcome')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l1')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('l2')">Next Lesson →</button>
       </div>
     </div>
@@ -570,6 +701,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('l1')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l2')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('l3')">Next →</button>
       </div>
     </div>
@@ -585,6 +717,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('l2')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l3')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('l4')">Next →</button>
       </div>
     </div>
@@ -600,6 +733,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('l3')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l4')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('l5')">Next →</button>
       </div>
     </div>
@@ -614,6 +748,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('l4')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l5')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('l6')">Next →</button>
       </div>
     </div>
@@ -628,6 +763,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('l5')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l6')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('l7')">Next →</button>
       </div>
     </div>
@@ -642,6 +778,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('l6')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l7')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('l8')">Next →</button>
       </div>
     </div>
@@ -656,6 +793,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('l7')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l8')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('l9')">Next →</button>
       </div>
     </div>
@@ -670,6 +808,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('l8')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l9')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('l10')">Next →</button>
       </div>
     </div>
@@ -684,6 +823,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('l9')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l10')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('l11')">Next →</button>
       </div>
     </div>
@@ -698,6 +838,7 @@
       </div>
       <div class="nav-buttons">
         <button class="btn-prev" onclick="goTo('l10')">← Back</button>
+        <button class="btn-quiz" onclick="openQuiz('l11')">📝 Quiz</button>
         <button class="btn-next" onclick="goTo('final')">Certificate →</button>
       </div>
     </div>
@@ -722,10 +863,121 @@
 
 </div>
 
+<!-- QUIZ MODAL -->
+<div class="quiz-modal" id="quizModal">
+  <div class="quiz-container">
+    <div id="quizContent"></div>
+  </div>
+</div>
+
 <script>
   const screens = ['welcome','l1','l2','l3','l4','l5','l6','l7','l8','l9','l10','l11','final'];
   const completed = new Set(['welcome']);
   let xp = 0;
+  let currentQuiz = null;
+  let quizAnswers = {};
+
+  const quizzes = {
+    l1: {
+      title: 'Token Efficiency Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'Which habit saves the most tokens?', a: 0, opts: ['Edit, Don\'t Stack', 'Use Artifacts', 'Web Search Often', 'Send Follow-ups'] },
+        { q: 'When should you start a new chat?', a: 1, opts: ['After 5 msgs', 'After ~15 msgs', 'After 50 msgs', 'Never'] },
+        { q: 'How much can you save with all 5 habits?', a: 2, opts: ['20-30%', '40-50%', '60-70%', '90%+'] }
+      ]
+    },
+    l2: {
+      title: 'Model Selection Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'Which model is best for quick answers?', a: 0, opts: ['Haiku', 'Sonnet', 'Opus 4.8', 'All equal'] },
+        { q: 'What % of work should use Sonnet?', a: 1, opts: ['5%', '15%', '50%', '80%'] },
+        { q: 'When use Opus 4.8?', a: 2, opts: ['Always', 'For drafts', 'Deep research only', 'Never'] }
+      ]
+    },
+    l3: {
+      title: 'Configuration Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'What does Memory do?', a: 0, opts: ['Stores your role/tone', 'Caches files', 'Speeds up chat', 'None of above'] },
+        { q: 'What\'s CLAUDE.md?', a: 1, opts: ['AI model', 'Project file with context', 'Setup guide', 'Code file'] },
+        { q: 'Do Projects cost extra tokens per use?', a: 2, opts: ['Yes, always', 'Sometimes', 'No, free after cache', 'Unknown'] }
+      ]
+    },
+    l4: {
+      title: 'Effort Control Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'What does Effort Control do?', a: 0, opts: ['Changes model', 'Adjusts thinking depth', 'Speeds up response', 'Reduces accuracy'] },
+        { q: 'Effort Control is on which model?', a: 1, opts: ['Haiku', 'Sonnet', 'Opus 4.8', 'All models'] },
+        { q: 'Do subagents work via Dynamic Workflows?', a: 0, opts: ['Yes', 'No', 'Sometimes', 'Unclear'] }
+      ]
+    },
+    l5: {
+      title: 'Claude Design Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'What can Claude Design create?', a: 0, opts: ['Code only', 'Designs & prototypes', 'Photos', 'Videos'] },
+        { q: 'Can you export Claude Design to PPTX?', a: 1, opts: ['No', 'Yes', 'Only PDF', 'Only Figma'] },
+        { q: 'What\'s the benefit of uploading design system?', a: 2, opts: ['Looks nice', 'Auto-applied to projects', 'Speeds upload', 'Reduces cost'] }
+      ]
+    },
+    l6: {
+      title: 'Skills Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'What are Skills?', a: 0, opts: ['Programming features', 'Instruction bundles', 'AI models', 'Plugins'] },
+        { q: 'When do Skills trigger?', a: 1, opts: ['Manually always', 'On demand only', 'Automatically by topic', 'Never auto'] },
+        { q: 'Which is high-priority?', a: 0, opts: ['pptx, docx, xlsx', 'Advanced math', 'Gaming', 'Social media'] }
+      ]
+    },
+    l7: {
+      title: 'Plugins Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'What are Plugins?', a: 0, opts: ['Software patches', 'Skill + MCP bundles', 'Browser add-ons', 'Subscriptions'] },
+        { q: 'Where do you install Plugins?', a: 1, opts: ['CLI', 'Settings → Plugins', 'App store', 'GitHub'] },
+        { q: 'Small Business plugin includes?', a: 0, opts: ['QuickBooks, PayPal, HubSpot', 'Slack, Figma', 'Notion, Asana', 'All of above'] }
+      ]
+    },
+    l8: {
+      title: 'Connections Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'What enable Connections?', a: 2, opts: ['Plugins', 'Skills', 'MCP', 'APIs only'] },
+        { q: 'Can Claude read real-time CRM data?', a: 0, opts: ['Yes via MCP', 'No', 'Only cached', 'Requires API key visible'] },
+        { q: 'Example: prep for call uses?', a: 1, opts: ['Manual lookup', 'Auto pull from email/deal/cal', 'Web search', 'None'] }
+      ]
+    },
+    l9: {
+      title: 'Chrome Agent Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'Claude in Chrome is a?', a: 0, opts: ['Browser extension', 'Desktop app', 'Web app', 'CLI tool'] },
+        { q: 'Can it multi-tab?', a: 0, opts: ['Yes', 'No', 'Only 1 tab', 'Requires plugin'] },
+        { q: 'Use case: automate?', a: 0, opts: ['Expense reports', 'Server updates', 'Email send', 'Code compile'] }
+      ]
+    },
+    l10: {
+      title: 'Cowork Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'Cowork brings agentic powers to?', a: 0, opts: ['Browser', 'Desktop/files', 'Phone', 'Server'] },
+        { q: 'Can Cowork automate Word/Excel?', a: 0, opts: ['Yes', 'No', 'Excel only', 'Requires plugin'] },
+        { q: 'Example: month-end close means?', a: 1, opts: ['Email only', 'Receipts → report → send', 'Manual entry', 'Spreadsheet link'] }
+      ]
+    },
+    l11: {
+      title: 'MCP Quiz',
+      bonus: 50,
+      questions: [
+        { q: 'What is MCP?', a: 0, opts: ['Model Compression Protocol', 'Model Context Protocol', 'Main Claude Processor', 'Multi-Core Platform'] },
+        { q: 'How many services support MCP?', a: 1, opts: ['10', '100M+ devs / 100B+ dollars of tools', '1000', 'Unknown'] },
+        { q: 'Install MCPs via?', a: 0, opts: ['Desktop Extensions', 'App store', 'CLI only', 'GitHub'] }
+      ]
+    }
+  };
 
   function goTo(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -748,6 +1000,96 @@
     if (pctEl) pctEl.textContent = pct + '%';
   }
 
+  function openQuiz(lessonId) {
+    if (!quizzes[lessonId]) return;
+    currentQuiz = lessonId;
+    quizAnswers = {};
+    renderQuiz();
+    document.getElementById('quizModal').classList.add('active');
+  }
+
+  function renderQuiz() {
+    const quiz = quizzes[currentQuiz];
+    const content = document.getElementById('quizContent');
+
+    let html = `
+      <div class="quiz-header">
+        <h2>${quiz.title}</h2>
+        <p>Answer the questions below. +${quiz.bonus} XP per correct answer!</p>
+      </div>
+    `;
+
+    quiz.questions.forEach((q, i) => {
+      html += `
+        <div class="quiz-question">
+          <h3>Q${i+1}. ${q.q}</h3>
+          <div class="quiz-options">
+      `;
+      q.opts.forEach((opt, j) => {
+        html += `<div class="quiz-option" onclick="selectAnswer(${i}, ${j})">${opt}</div>`;
+      });
+      html += `
+          </div>
+        </div>
+      `;
+    });
+
+    html += `
+      <div class="quiz-buttons">
+        <button class="btn-close-quiz" onclick="closeQuiz()">Skip Quiz</button>
+        <button class="btn-next" onclick="submitQuiz()">Submit Answers</button>
+      </div>
+    `;
+
+    content.innerHTML = html;
+  }
+
+  function selectAnswer(q, a) {
+    quizAnswers[q] = a;
+    const options = document.querySelectorAll(`#quizContent .quiz-question`)[q].querySelectorAll('.quiz-option');
+    options.forEach((o, i) => o.classList.toggle('selected', i === a));
+  }
+
+  function submitQuiz() {
+    const quiz = quizzes[currentQuiz];
+    let correct = 0;
+
+    quiz.questions.forEach((q, i) => {
+      if (quizAnswers[i] === q.a) correct++;
+    });
+
+    xp += correct * quiz.bonus;
+    updateXPDisplay();
+
+    const content = document.getElementById('quizContent');
+    const pct = Math.round((correct / quiz.questions.length) * 100);
+
+    let message = pct >= 70 ? '🎉 Great job!' : '📚 Keep learning!';
+
+    content.innerHTML = `
+      <div class="quiz-results">
+        <h2>Quiz Complete!</h2>
+        <div class="score">${pct}%</div>
+        <p>${correct} out of ${quiz.questions.length} correct</p>
+        <p>+${correct * quiz.bonus} XP</p>
+        <p>${message}</p>
+        <div class="quiz-buttons">
+          <button class="btn-close-quiz" onclick="closeQuiz()">Close</button>
+          <button class="btn-retake-quiz" onclick="openQuiz('${currentQuiz}')">Retake Quiz</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function closeQuiz() {
+    document.getElementById('quizModal').classList.remove('active');
+  }
+
+  function updateXPDisplay() {
+    const xpEl = document.getElementById('xp-count');
+    if (xpEl) xpEl.textContent = xp;
+  }
+
   function toggleMobileMenu() {
     const sidebar = document.getElementById('sidebar');
     if (sidebar) {
@@ -768,6 +1110,15 @@
     const menuBtn = document.getElementById('mobileMenuBtn');
     if (sidebar && menuBtn && !sidebar.contains(event.target) && !menuBtn.contains(event.target)) {
       closeMobileMenu();
+    }
+  });
+
+  // Close quiz when clicking outside
+  document.addEventListener('click', function(event) {
+    const modal = document.getElementById('quizModal');
+    const container = document.querySelector('.quiz-container');
+    if (modal && container && !container.contains(event.target) && modal.classList.contains('active')) {
+      closeQuiz();
     }
   });
 
